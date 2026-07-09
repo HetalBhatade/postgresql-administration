@@ -156,6 +156,152 @@ Complete!
 
 At this stage, PostgreSQL is installed on the server. The next step is to initialize the PostgreSQL database cluster before starting the PostgreSQL service.
 
+
+
+---
+
+# Step 5 - Initialize the PostgreSQL Database Cluster
+
+## Command
+
+```bash
+sudo /usr/pgsql-16/bin/postgresql-16-setup initdb
+```
+
+## Purpose
+
+Initializes the PostgreSQL database cluster by creating the required data directory, system databases, configuration files, and directory structure.
+
+Although PostgreSQL is installed on the server, it cannot be used until the database cluster is initialized.
+
+## Breakdown
+
+- **sudo** – Executes the command with administrative privileges.
+- **/usr/pgsql-16/bin/postgresql-16-setup** – PostgreSQL setup utility used to configure a PostgreSQL 16 server.
+- **initdb** – Initializes a new PostgreSQL database cluster.
+
+## Screenshot
+
+![Initialize PostgreSQL Database Cluster](screenshots/01-dnf-intdb-command.png)
+
+## Expected Result
+
+The PostgreSQL database cluster is initialized successfully. During this process, PostgreSQL creates the data directory, default system databases, and configuration files such as `postgresql.conf` and `pg_hba.conf`.
+
+A successful execution displays a message similar to:
+
+```text
+Success. You can now start the database server using:
+
+sudo systemctl start postgresql-16
+
+
+---
+
+# Step 6 - Enable the PostgreSQL Service
+
+## Command
+
+```bash
+sudo systemctl enable postgresql-16
+```
+
+## Purpose
+
+Configures the PostgreSQL 16 service to start automatically whenever the operating system boots.
+
+Enabling the service ensures that PostgreSQL starts automatically after a system restart, eliminating the need to start it manually each time the server is rebooted.
+
+## Breakdown
+
+- **sudo** – Executes the command with administrative privileges.
+- **systemctl** – Utility used to manage systemd services.
+- **enable** – Configures the service to start automatically during system boot.
+- **postgresql-16** – The PostgreSQL 16 service.
+
+## Screenshot
+
+![Enable PostgreSQL Service](screenshots/01-dnf-enable-command.png)
+
+## Expected Result
+
+The PostgreSQL service is successfully enabled. A symbolic link is created so that the PostgreSQL service starts automatically during system startup.
+
+A successful execution displays a message similar to:
+
+```text
+Created symlink ...
+```
+
+or
+
+```text
+Created symlink /etc/systemd/system/multi-user.target.wants/postgresql-16.service → /usr/lib/systemd/system/postgresql-16.service.
+
+
+---
+
+# Step 7 - Start and Verify the PostgreSQL Service
+
+## Commands
+
+```bash
+sudo systemctl start postgresql-16
+sudo systemctl status postgresql-16
+```
+
+## Purpose
+
+The first command starts the PostgreSQL 16 service immediately. The second command verifies that the PostgreSQL service is running correctly and displays its current status.
+
+## Breakdown
+
+### Command 1
+
+```bash
+sudo systemctl start postgresql-16
+```
+
+- **sudo** – Executes the command with administrative privileges.
+- **systemctl** – Utility used to manage systemd services.
+- **start** – Starts the specified service immediately.
+- **postgresql-16** – The PostgreSQL 16 service.
+
+### Command 2
+
+```bash
+sudo systemctl status postgresql-16
+```
+
+- **sudo** – Executes the command with administrative privileges.
+- **systemctl** – Utility used to manage systemd services.
+- **status** – Displays the current status of the service.
+- **postgresql-16** – The PostgreSQL 16 service.
+
+## Screenshot
+
+![Start and Verify PostgreSQL Service](screenshots/01-pgstart-pgstatus-success.png)
+
+## Expected Result
+
+The PostgreSQL service starts successfully, and the status command confirms that the service is running.
+
+A successful status output displays information similar to:
+
+```text
+Active: active (running)
+```
+
+This confirms that the PostgreSQL server is running and ready to accept client connections.
+
+---
+```
+
+---
+```
+
+---
+
 ---
 
 ---
