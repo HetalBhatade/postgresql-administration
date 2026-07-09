@@ -69,3 +69,47 @@ The default RHEL repositories may not provide the latest PostgreSQL version. Ins
 The following screenshot shows the execution of the command and the successful installation of the PostgreSQL PGDG repository package.
 
 ![Install PGDG Repository](screenshots/01-dnf-install-pgdg-repo-success-command.png)
+
+
+
+---
+
+# Step 3 - Disable the Default PostgreSQL Module
+
+## Command
+
+```bash
+sudo dnf -qy module disable PostgreSQL
+```
+
+## Purpose
+
+Disables the default PostgreSQL module provided by the RHEL AppStream repository.
+
+This ensures that PostgreSQL packages are installed from the official PostgreSQL Global Development Group (PGDG) repository instead of the operating system repository, preventing package version conflicts.
+
+## Breakdown
+
+- **sudo** – Executes the command with administrative privileges.
+- **dnf** – Package manager used in RHEL 9.
+- **-q** – Runs the command in quiet mode by suppressing unnecessary output.
+- **-y** – Automatically answers "Yes" to confirmation prompts.
+- **module** – Manages DNF software modules.
+- **disable** – Disables the specified module.
+- **PostgreSQL** – The default PostgreSQL AppStream module provided by RHEL.
+
+## Screenshot
+
+![Disable PostgreSQL Module](screenshots/01-dnf-disbale-mod-command)
+
+## Expected Result
+
+The PostgreSQL AppStream module is disabled successfully, and the command completes with a message similar to:
+
+```text
+Complete!
+```
+
+After this step, DNF installs PostgreSQL packages from the official PGDG repository instead of the RHEL AppStream repository.
+
+---
