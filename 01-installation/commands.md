@@ -100,7 +100,7 @@ This ensures that PostgreSQL packages are installed from the official PostgreSQL
 
 ## Screenshot
 
-![Disable PostgreSQL Module](screenshots/01-dnf-disbale-mod-command)
+![Disable PostgreSQL Module](screenshots/01-dnf-disbale-mod-command.png)
 
 ## Expected Result
 
