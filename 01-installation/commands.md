@@ -110,6 +110,52 @@ The PostgreSQL AppStream module is disabled successfully, and the command comple
 Complete!
 ```
 
-After this step, DNF installs PostgreSQL packages from the official PGDG repository instead of the RHEL AppStream repository.
+After this step, DNF installs PostgreSQL packages from the official PGDG repository instead of the RHEL AppStream repository. 
+
+---
+
+# Step 4 - Install PostgreSQL 16 Server
+
+## Command
+
+```bash
+sudo dnf install postgresql16-server -y
+```
+
+## Purpose
+
+Installs the PostgreSQL 16 server package from the official PostgreSQL Global Development Group (PGDG) repository.
+
+This package contains the PostgreSQL database server, client utilities, libraries, and other components required to run a PostgreSQL database server.
+
+## Breakdown
+
+- **sudo** – Executes the command with administrative privileges.
+- **dnf** – Package manager used in RHEL 9.
+- **install** – Installs the specified software package.
+- **postgresql16-server** – PostgreSQL 16 server package.
+- **-y** – Automatically answers "Yes" to all confirmation prompts.
+
+## Screenshot
+
+### Command Execution
+
+![Install PostgreSQL 16 Server - Command](screenshots/01-dnf-install-PG-command.png)
+
+### Successful Installation
+
+![Install PostgreSQL 16 Server - Success](screenshots/01-dnf-install-PG-success.png)
+
+## Expected Result
+
+The PostgreSQL 16 server package and all required dependencies are installed successfully. Once the installation is complete, DNF displays a message similar to:
+
+```text
+Complete!
+```
+
+At this stage, PostgreSQL is installed on the server. The next step is to initialize the PostgreSQL database cluster before starting the PostgreSQL service.
+
+---
 
 ---
