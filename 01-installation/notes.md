@@ -14,7 +14,7 @@ This document provides the conceptual understanding of installing PostgreSQL 16 
 |-----------|---------|
 | Host Operating System | Windows 11 |
 | Virtualization | VMware Workstation Pro 17 |
-| Guest Operating System | Rocky Linux 9 |
+| Guest Operating System | Red Hat Enterprise Linux 9.8 (RHEL)  |
 | PostgreSQL Version | PostgreSQL 16 |
 
 
