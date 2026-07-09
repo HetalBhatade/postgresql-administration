@@ -32,3 +32,8 @@ Running this command before installing PostgreSQL ensures that the operating sys
 ## Expected Result
 
 The command completes successfully and the operating system packages are updated.
+
+
+## Screenshot
+
+![DNF Update Command](screenshots/01-dnf-update-success.png)
