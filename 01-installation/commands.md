@@ -294,6 +294,109 @@ Active: active (running)
 
 This confirms that the PostgreSQL server is running and ready to accept client connections.
 
+
+---
+
+# Step 8 - Reload the PostgreSQL Service
+
+## Command
+
+```bash
+sudo systemctl reload postgresql-16
+```
+
+## Purpose
+
+Reloads the PostgreSQL service without stopping or restarting the database server.
+
+This command is typically used after making changes to PostgreSQL configuration files that support a configuration reload. It allows the server to apply the new settings while continuing to accept client connections.
+
+## Breakdown
+
+- **sudo** – Executes the command with administrative privileges.
+- **systemctl** – Utility used to manage systemd services.
+- **reload** – Reloads the service configuration without restarting the service.
+- **postgresql-16** – The PostgreSQL 16 service.
+
+## Screenshot
+
+![Reload PostgreSQL Service](screenshots/01-dnf-reload-command.png)
+
+## Expected Result
+
+The PostgreSQL service reloads successfully without interrupting existing database connections.
+
+If the configuration files contain valid settings, the command completes without displaying any error messages.
+
+---
+
+# Step 9 - Connect to PostgreSQL and Configure the Superuser Password
+
+## Commands
+
+```bash
+sudo -u postgres psql
+```
+
+```sql
+\password postgres
+```
+
+```sql
+\du
+```
+
+## Purpose
+
+The first command connects to the PostgreSQL server using the default PostgreSQL superuser (`postgres`). After connecting, the password for the `postgres` user is set to improve security. Finally, the `\du` command is used to verify the available database roles and their assigned privileges.
+
+## Breakdown
+
+### Command 1
+
+```bash
+sudo -u postgres psql
+```
+
+- **sudo** – Executes the command with administrative privileges.
+- **-u postgres** – Runs the command as the PostgreSQL operating system user.
+- **psql** – Starts the PostgreSQL interactive command-line client.
+
+### Command 2
+
+```sql
+\password postgres
+```
+
+- **\password** – PostgreSQL meta-command used to change a user's password.
+- **postgres** – The PostgreSQL superuser account.
+
+### Command 3
+
+```sql
+\du
+```
+
+- **\du** – Lists all PostgreSQL database roles and their assigned privileges.
+
+## Screenshot
+
+![Connect to PostgreSQL and Configure Superuser](screenshots/01-dnf-postgresuser-command.png)
+
+## Expected Result
+
+The PostgreSQL interactive terminal (`psql`) opens successfully. The password for the `postgres` superuser is updated after entering and confirming the new password. Running the `\du` command displays the available roles and confirms that the `postgres` user has superuser privileges.
+
+
+```
+
+---
+
+
+
+
+---
+
 ---
 ```
 
