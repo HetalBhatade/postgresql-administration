@@ -188,14 +188,6 @@ Although PostgreSQL is installed on the server, it cannot be used until the data
 
 The PostgreSQL database cluster is initialized successfully. During this process, PostgreSQL creates the data directory, default system databases, and configuration files such as `postgresql.conf` and `pg_hba.conf`.
 
-A successful execution displays a message similar to:
-
-```text
-Success. You can now start the database server using:
-
-sudo systemctl start postgresql-16
-
-
 ---
 
 # Step 6 - Enable the PostgreSQL Service
@@ -228,16 +220,6 @@ Enabling the service ensures that PostgreSQL starts automatically after a system
 The PostgreSQL service is successfully enabled. A symbolic link is created so that the PostgreSQL service starts automatically during system startup.
 
 A successful execution displays a message similar to:
-
-```text
-Created symlink ...
-```
-
-or
-
-```text
-Created symlink /etc/systemd/system/multi-user.target.wants/postgresql-16.service → /usr/lib/systemd/system/postgresql-16.service.
-
 
 ---
 
