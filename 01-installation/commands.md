@@ -25,7 +25,7 @@ Running this command before installing PostgreSQL ensures that the operating sys
 - **update** – Updates all installed packages.
 - **-y** – Automatically answers "Yes" to all confirmation prompts.
 
-## Screenshot
+## Evidence
 
 ![DNF Update Command](screenshots/01-dnf-update-command.png)
 
@@ -34,7 +34,7 @@ Running this command before installing PostgreSQL ensures that the operating sys
 The command completes successfully and the operating system packages are updated.
 
 
-## Screenshot
+## Evidence
 
 ![DNF Update Command](screenshots/01-dnf-update-success.png)
 
@@ -98,7 +98,7 @@ This ensures that PostgreSQL packages are installed from the official PostgreSQL
 - **disable** – Disables the specified module.
 - **PostgreSQL** – The default PostgreSQL AppStream module provided by RHEL.
 
-## Screenshot
+## Evidence
 
 ![Disable PostgreSQL Module](screenshots/01-dnf-disbale-mod-command.png)
 
@@ -136,7 +136,7 @@ This package contains the PostgreSQL database server, client utilities, librarie
 - **postgresql16-server** – PostgreSQL 16 server package.
 - **-y** – Automatically answers "Yes" to all confirmation prompts.
 
-## Screenshot
+## Evidence
 
 ### Command Execution
 
@@ -180,7 +180,7 @@ Although PostgreSQL is installed on the server, it cannot be used until the data
 - **/usr/pgsql-16/bin/postgresql-16-setup** – PostgreSQL setup utility used to configure a PostgreSQL 16 server.
 - **initdb** – Initializes a new PostgreSQL database cluster.
 
-## Screenshot
+## Evidence
 
 ![Initialize PostgreSQL Database Cluster](screenshots/01-dnf-intdb-command.png)
 
@@ -211,7 +211,7 @@ Enabling the service ensures that PostgreSQL starts automatically after a system
 - **enable** – Configures the service to start automatically during system boot.
 - **postgresql-16** – The PostgreSQL 16 service.
 
-## Screenshot
+## Evidence
 
 ![Enable PostgreSQL Service](screenshots/01-dnf-enable-command.png)
 
@@ -260,7 +260,7 @@ sudo systemctl status postgresql-16
 - **status** – Displays the current status of the service.
 - **postgresql-16** – The PostgreSQL 16 service.
 
-## Screenshot
+## Evidence
 
 ![Start and Verify PostgreSQL Service](screenshots/01-pgstart-pgstatus-success.png)
 
@@ -300,7 +300,7 @@ This command is typically used after making changes to PostgreSQL configuration 
 - **reload** – Reloads the service configuration without restarting the service.
 - **postgresql-16** – The PostgreSQL 16 service.
 
-## Screenshot
+## Evidence
 
 ![Reload PostgreSQL Service](screenshots/01-dnf-reload-command.png)
 
@@ -361,7 +361,7 @@ sudo -u postgres psql
 
 - **\du** – Lists all PostgreSQL database roles and their assigned privileges.
 
-## Screenshot
+## Evidence
 
 ![Connect to PostgreSQL and Configure Superuser](screenshots/01-dnf-postgresuser-command.png)
 
