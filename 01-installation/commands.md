@@ -29,7 +29,7 @@ Running this command before installing PostgreSQL ensures that the operating sys
 
 ![DNF Update Command](screenshots/01-dnf-update-command.png)
 
-## Expected Result
+## Verification
 
 The command completes successfully and the operating system packages are updated.
 
@@ -102,7 +102,7 @@ This ensures that PostgreSQL packages are installed from the official PostgreSQL
 
 ![Disable PostgreSQL Module](screenshots/01-dnf-disbale-mod-command.png)
 
-## Expected Result
+## Verification
 
 The PostgreSQL AppStream module is disabled successfully, and the command completes with a message similar to:
 
@@ -146,7 +146,7 @@ This package contains the PostgreSQL database server, client utilities, librarie
 
 ![Install PostgreSQL 16 Server - Success](screenshots/01-dnf-install-PG-success.png)
 
-## Expected Result
+## Verification
 
 The PostgreSQL 16 server package and all required dependencies are installed successfully. Once the installation is complete, DNF displays a message similar to:
 
@@ -184,7 +184,7 @@ Although PostgreSQL is installed on the server, it cannot be used until the data
 
 ![Initialize PostgreSQL Database Cluster](screenshots/01-dnf-intdb-command.png)
 
-## Expected Result
+## Verification
 
 The PostgreSQL database cluster is initialized successfully. During this process, PostgreSQL creates the data directory, default system databases, and configuration files such as `postgresql.conf` and `pg_hba.conf`.
 
@@ -215,7 +215,7 @@ Enabling the service ensures that PostgreSQL starts automatically after a system
 
 ![Enable PostgreSQL Service](screenshots/01-dnf-enable-command.png)
 
-## Expected Result
+## Verification
 
 The PostgreSQL service is successfully enabled. A symbolic link is created so that the PostgreSQL service starts automatically during system startup.
 
@@ -264,7 +264,7 @@ sudo systemctl status postgresql-16
 
 ![Start and Verify PostgreSQL Service](screenshots/01-pgstart-pgstatus-success.png)
 
-## Expected Result
+## Verification
 
 The PostgreSQL service starts successfully, and the status command confirms that the service is running.
 
@@ -304,7 +304,7 @@ This command is typically used after making changes to PostgreSQL configuration 
 
 ![Reload PostgreSQL Service](screenshots/01-dnf-reload-command.png)
 
-## Expected Result
+## Verification
 
 The PostgreSQL service reloads successfully without interrupting existing database connections.
 
@@ -365,7 +365,7 @@ sudo -u postgres psql
 
 ![Connect to PostgreSQL and Configure Superuser](screenshots/01-dnf-postgresuser-command.png)
 
-## Expected Result
+## Verification
 
 The PostgreSQL interactive terminal (`psql`) opens successfully. The password for the `postgres` superuser is updated after entering and confirming the new password. Running the `\du` command displays the available roles and confirms that the `postgres` user has superuser privileges.
 
