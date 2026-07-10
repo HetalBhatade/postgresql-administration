@@ -4,7 +4,7 @@
 
 PostgreSQL is a powerful, open-source Relational Database Management System (RDBMS) known for its reliability, extensibility, standards compliance, and advanced features. It is widely used for enterprise applications, web applications, analytics, data warehousing, and cloud-native applications.
 
-This document provides the conceptual understanding of installing PostgreSQL 16 on Rocky Linux using the official PostgreSQL Global Development Group (PGDG) repository. The practical installation commands and their explanations are documented separately in `commands.md`.
+This document provides the conceptual understanding of Red Hat Enterprise Linux 9.8 using the official PostgreSQL Global Development Group (PGDG) repository. The practical installation commands and their explanations are documented separately in `commands.md`.
 
 ---
 
