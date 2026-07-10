@@ -46,7 +46,7 @@ After completing this topic, I should be able to:
 
 Before installing PostgreSQL, ensure the following prerequisites are met:
 
-- Rocky Linux 9 server
+- Red Hat Enterprise Linux 9.8.
 - Internet connectivity
 - Root or sudo privileges
 - Basic Linux command-line knowledge
@@ -77,9 +77,7 @@ This topic covers the following concepts:
 |------|---------|
 | `README.md` | Overview of the installation topic |
 | `commands.md` | Installation commands with explanations |
-| `lab-environment.md` | Details of the lab environment |
 | `troubleshooting.md` | Installation issues and their resolutions |
-| `interview-questions.md` | Interview questions related to PostgreSQL installation |
 | `screenshots/` | Screenshots captured during the installation process |
 
 ---
