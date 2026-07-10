@@ -11,12 +11,6 @@ This document contains issues encountered during the PostgreSQL installation pro
 - Installation Method: PGDG Repository
 
 
-# PostgreSQL Installation Troubleshooting
-
-This document contains the issues encountered during the PostgreSQL 16 installation on Red Hat Enterprise Linux 9.8 and the steps taken to resolve them.
-
----
-
 # Issue 1 - Sudo Permission Error
 
 ## Problem
@@ -78,7 +72,7 @@ The operating system was registered with Red Hat Subscription Manager and an ava
 ```bash
 sudo subscription-manager register
 
-sudo subscription-manager attach --auto
+sudo subscription-manager status
 ```
 
 ## Resolution Screenshot
