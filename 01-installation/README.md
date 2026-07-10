@@ -1,8 +1,8 @@
 # PostgreSQL Installation
 
 ## Objective
-
-This section documents the installation of PostgreSQL on a Linux server as part of my PostgreSQL Administration learning journey.
+.
+This section documents the complete installation of PostgreSQL 16 using the official PostgreSQL Global Development Group (PGDG) repository on Red Hat Enterprise Linux 9.8.
 
 ## Topics Covered
 
@@ -27,7 +27,7 @@ This section documents the installation of PostgreSQL on a Linux server as part 
 | Standby Server 1 | Setup in progress |
 
 
-- ## Repository Contents
+## Repository Contents
 
 - [README.md](README.md) - Overview of the PostgreSQL installation lab.
 - [notes.md](notes.md) - Installation concepts, explanations, and learning notes.
