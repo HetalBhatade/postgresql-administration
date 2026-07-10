@@ -64,7 +64,7 @@ The default RHEL repositories may not provide the latest PostgreSQL version. Ins
 - **-y** – Automatically answers "Yes" to all prompts.
 - **https://download.postgresql.org/...** – Official PostgreSQL PGDG repository package.
 
-## Execution Result
+## Verification
 
 The following screenshot shows the execution of the command and the successful installation of the PostgreSQL PGDG repository package.
 
@@ -372,21 +372,3 @@ The PostgreSQL interactive terminal (`psql`) opens successfully. The password fo
 
 ```
 
----
-
-
-
-
----
-
----
-```
-
----
-```
-
----
-
----
-
----
