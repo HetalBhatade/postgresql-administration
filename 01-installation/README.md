@@ -21,15 +21,16 @@ This section documents the installation of PostgreSQL on a Linux server as part 
 |-----------|---------|
 | Host OS | Windows 11 |
 | Virtualization | VMware Workstation Pro 17 |
-| Guest OS | Rocky Linux 9 |
+| Guest OS | Red Hat Enterprise Linux 9.8 |
 | PostgreSQL Version | PostgreSQL 16 |
-| Server Role | Primary Server |
+| Primary Server | Installed and configured |
+| Standby Server 1 | Setup in progress |
 
-## Files
 
-- `notes.md`
-- `commands.md`
-- `lab-environment.md`
-- `troubleshooting.md`
-- `interview-questions.md`
-- `screenshots/`
+- ## Repository Contents
+
+- [README.md](README.md) - Overview of the PostgreSQL installation lab.
+- [notes.md](notes.md) - Installation concepts, explanations, and learning notes.
+- [commands.md](commands.md) - Installation commands with explanations and screenshots.
+- [troubleshooting.md](troubleshooting.md) - Problems encountered during installation and their resolutions.
+- [screenshots](screenshots/) - Screenshots captured during the installation process.
