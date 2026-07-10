@@ -17,7 +17,7 @@ This document contains issues encountered during the PostgreSQL installation pro
 
 While preparing the server for PostgreSQL installation, the `dbadmin` user did not have sudo privileges. As a result, administrative commands required for installation could not be executed.
 
-## Error Screenshot
+## Error Evidence
 
 ![Sudo Permission Error](screenshots/01-dnf-update-sudo-error.png)
 
@@ -39,7 +39,7 @@ sudo whoami
 su - dbadmin
 ```
 
-## Resolution Screenshot
+## Resolution Evidence
 
 ![Sudo Permission Fixed](screenshots/01-dnf-update-sudo-fix.png)
 
@@ -59,7 +59,7 @@ On Red Hat Enterprise Linux, users must belong to the `wheel` group to use the `
 
 Before installing PostgreSQL from the PGDG repository, the operating system was not registered with Red Hat Subscription Manager. Because of this, access to required repositories was unavailable.
 
-## Error Screenshot
+## Error Evidence
 
 ![Subscription Error](screenshots/01-dnf-update-subscription-error.png)
 
@@ -75,7 +75,7 @@ sudo subscription-manager register
 sudo subscription-manager status
 ```
 
-## Resolution Screenshot
+## Resolution Evidence
 
 ![Subscription Fixed](screenshots/01-dnf-update-subscription-fix.png)
 
