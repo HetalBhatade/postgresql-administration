@@ -1,7 +1,7 @@
 # PostgreSQL Installation
 
 ## Objective
-.
+
 This section documents the complete installation of PostgreSQL 16 using the official PostgreSQL Global Development Group (PGDG) repository on Red Hat Enterprise Linux 9.8.
 
 ## Topics Covered
@@ -23,8 +23,11 @@ This section documents the complete installation of PostgreSQL 16 using the offi
 | Virtualization | VMware Workstation Pro 17 |
 | Guest OS | Red Hat Enterprise Linux 9.8 |
 | PostgreSQL Version | PostgreSQL 16 |
-| Primary Server | Installed and configured |
-| Standby Server 1 | Setup in progress |
+
+| Server | Status |
+|--------|--------|
+| Primary Server | Installed and Configured |
+| Standby Server 1 | Installation in Progress |
 
 
 ## Repository Contents
