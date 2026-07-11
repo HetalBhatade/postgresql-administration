@@ -118,15 +118,14 @@ When a tablespace is created outside the data directory, PostgreSQL creates a sy
 
 The `pg_wal` directory stores PostgreSQL Write-Ahead Log (WAL) files.
 
-WAL files record every database change before it is written to the data files.
+Key Points
 
-Important points:
-
-- Default WAL segment size is 16 MB.
+- WAL files record every database modification before the changes are written to the data files.
+- The default WAL segment size is 16 MB.
 - PostgreSQL automatically switches to a new WAL segment when the current segment becomes full.
-- WAL files support crash recovery and replication.
-- Checkpoints occur based on `checkpoint_timeout` or `max_wal_size`, not simply because a WAL segment changes.
-
+- When WAL archiving is enabled, completed WAL segments can be archived using the configured `archive_command`.
+- WAL files are essential for crash recovery, Point-in-Time Recovery (PITR), and streaming replication.
+- Checkpoints are triggered based on `checkpoint_timeout` or `max_wal_size`, not simply because a WAL segment reaches 16 MB.
 ---
 
 # Log Directory
