@@ -22,11 +22,7 @@ The purpose of this module is to understand how PostgreSQL stores databases, sys
 - postmaster.opts
 - Basic PostgreSQL Commands
 
-## Files
 
-- notes.md
-- commands.md
-- screenshots/
 
 ## Lab Environment
 
@@ -36,5 +32,17 @@ The purpose of this module is to understand how PostgreSQL stores databases, sys
 | Virtualization | VMware Workstation Pro 17 |
 | Guest OS | Red Hat Enterprise Linux 9.8 |
 | PostgreSQL Version | PostgreSQL 16 |
-| Primary Server | Installed |
-| Standby Server 1 | Installed |
+
+| Server | Status |
+|--------|--------|
+| Primary Server | Installed and Configured |
+| Standby Server 1 | Installation in Progress |
+
+
+## Repository Contents
+
+- [README.md](README.md) - Overview of the PostgreSQL installation lab.
+- [notes.md](notes.md) - Installation concepts, explanations, and learning notes.
+- [commands.md](commands.md) - Installation commands with explanations and screenshots.
+- [screenshots](screenshots/) - Screenshots captured during the installation process.
+
