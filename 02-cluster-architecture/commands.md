@@ -133,10 +133,12 @@ The database names and their corresponding OIDs are displayed successfully. Thes
 
 ```bash
 cd /var/lib/pgsql/16/data/pg_wal
+ls -lrth
 cd /var/lib/pgsql/16/data/log
+ls -lrth
 cd /var/lib/pgsql/16/data/pg_tblspc
+ls -lrth
 cd /var/lib/pgsql/16/data/global
-
 ls -lrth
 ```
 
