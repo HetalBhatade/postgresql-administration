@@ -123,7 +123,7 @@ The OID corresponds to the directory name created inside the PostgreSQL `base` d
 
 The database names and their corresponding OIDs are displayed successfully. These OIDs match the directory names located under the `base` directory.
 
-![Database OID Mapping](screenshots/04-data-directory-other-files.png)
+![Database OID Mapping](screenshots/04-database-oid-relatation.png)
 
 ---
 
