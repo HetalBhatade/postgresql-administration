@@ -20,7 +20,7 @@ The purpose of this module is to understand how PostgreSQL stores databases, sys
 - Log Directory
 - postmaster.pid
 - postmaster.opts
-- Basic PostgreSQL Commands
+
 
 
 
@@ -36,13 +36,12 @@ The purpose of this module is to understand how PostgreSQL stores databases, sys
 | Server | Status |
 |--------|--------|
 | Primary Server | Installed and Configured |
-| Standby Server 1 | Installation in Progress |
+| Standby Server 1 |Installed and Configured |
 
 
 ## Repository Contents
 
-- [README.md](README.md) - Overview of the PostgreSQL installation lab.
-- [notes.md](notes.md) - Installation concepts, explanations, and learning notes.
-- [commands.md](commands.md) - Installation commands with explanations and screenshots.
-- [screenshots](screenshots/) - Screenshots captured during the installation process.
-
+- [README.md](README.md) - Overview of the PostgreSQL Cluster Architecture module.
+- [notes.md](notes.md) - PostgreSQL Cluster Architecture concepts and explanations.
+- [commands.md](commands.md) - Practical SQL queries and Linux commands used to explore the PostgreSQL cluster..
+- [screenshots](screenshots/) -  Screenshots captured while exploring the PostgreSQL cluster architecture.
