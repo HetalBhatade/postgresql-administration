@@ -1,11 +1,14 @@
-
 # PostgreSQL Configuration File Commands
 
-This document contains the practical SQL queries and Linux commands used to explore PostgreSQL configuration files, verify their locations, inspect their contents, modify configuration parameters, and validate authentication configuration.
+This document contains the SQL queries and Linux commands used to explore PostgreSQL configuration files, inspect their contents, modify configuration parameters, and verify configuration changes.
 
 ---
 
-# Step 1 - View PostgreSQL Configuration Files
+# Step 1 - View PostgreSQL Configuration File Locations
+
+## Purpose
+
+Display the location of the PostgreSQL configuration files.
 
 ## Commands
 
@@ -19,19 +22,21 @@ SHOW ident_file;
 SHOW data_directory;
 ```
 
-## Purpose
+## Evidence
 
-Displays the location of the PostgreSQL configuration files stored in the data directory.
+![PostgreSQL Configuration File Path](screenshots/postgresql.conf-file-path.png)
 
-## Verification
+![All Configuration Files](screenshots/all_conf_file.png)
 
-- all_conf_file.png
-- postgresql.conf-file-path.png
-- pg_hba.conf-path.png
+![pg_hba.conf File Path](screenshots/pg_hba.conf-path.png)
 
 ---
 
 # Step 2 - View pg_hba.conf Content
+
+## Purpose
+
+Display the contents of the Host-Based Authentication configuration file and verify the authentication rules currently loaded by PostgreSQL.
 
 ## Commands
 
@@ -49,17 +54,17 @@ SELECT
 FROM pg_hba_file_rules;
 ```
 
-## Purpose
+## Evidence
 
-Displays the contents of the Host-Based Authentication configuration file and verifies the authentication rules currently loaded by PostgreSQL.
-
-## Verification
-
-- pg_hba.conf-content.png
+![pg_hba.conf Content](screenshots/pg_hba.conf-content.png)
 
 ---
 
 # Step 3 - View Default pg_ident.conf
+
+## Purpose
+
+Display the default contents of the PostgreSQL user mapping configuration file before making any changes.
 
 ## Commands
 
@@ -67,17 +72,17 @@ Displays the contents of the Host-Based Authentication configuration file and ve
 cat pg_ident.conf
 ```
 
-## Purpose
+## Evidence
 
-Displays the default contents of the PostgreSQL user mapping configuration file before any modifications.
-
-## Verification
-
-- pg_ident_file.png
+![pg_ident.conf File](screenshots/pg_ident_file.png)
 
 ---
 
-# Step 4 - Modify Configuration using ALTER SYSTEM
+# Step 4 - Modify Configuration Using ALTER SYSTEM
+
+## Purpose
+
+Modify a PostgreSQL configuration parameter using ALTER SYSTEM and verify that the change is written to postgresql.auto.conf.
 
 ## Commands
 
@@ -95,17 +100,17 @@ SHOW log_min_duration_statement;
 cat postgresql.auto.conf
 ```
 
-## Purpose
+## Evidence
 
-Changes a PostgreSQL configuration parameter using ALTER SYSTEM, reloads the configuration, and verifies that PostgreSQL automatically stores the parameter in postgresql.auto.conf.
-
-## Verification
-
-- auto.conf.file-test.png
+![ALTER SYSTEM Test](screenshots/auto.conf.file-test.png)
 
 ---
 
-# Step 5 - Create Test User for pg_ident.conf
+# Step 5 - Create Test Role for pg_ident.conf
+
+## Purpose
+
+Create a PostgreSQL role used for demonstrating username mapping through pg_ident.conf.
 
 ## Commands
 
@@ -119,17 +124,17 @@ PASSWORD 'Oracle@1234';
 \du
 ```
 
-## Purpose
+## Evidence
 
-Creates a PostgreSQL role used for demonstrating username mapping through pg_ident.conf.
-
-## Verification
-
-- pg_ident-file-command.png
+![Create Oracle Role](screenshots/pg_ident-file-command.png)
 
 ---
 
 # Step 6 - Update pg_ident.conf and pg_hba.conf
+
+## Purpose
+
+Create a backup of pg_ident.conf, update the authentication configuration files, and reload the PostgreSQL configuration.
 
 ## Commands
 
@@ -145,17 +150,17 @@ vi pg_hba.conf
 SELECT pg_reload_conf();
 ```
 
-## Purpose
+## Evidence
 
-Creates a backup of pg_ident.conf, updates both authentication configuration files, and reloads the PostgreSQL configuration.
-
-## Verification
-
-- pg_hba_conf-fileupdate.png
+![Updated pg_hba.conf](screenshots/pg_hba_conf-fileupdate.png)
 
 ---
 
-# Step 7 - Verify pg_ident Mapping
+# Step 7 - Verify pg_ident.conf Mapping
+
+## Purpose
+
+Verify that PostgreSQL successfully loaded the username mappings defined in pg_ident.conf.
 
 ## Commands
 
@@ -164,17 +169,17 @@ SELECT *
 FROM pg_ident_file_mappings;
 ```
 
-## Purpose
+## Evidence
 
-Displays the username mappings currently loaded from pg_ident.conf.
-
-## Verification
-
-- pg_ident-file-result.png
+![pg_ident Mapping Verification](screenshots/pg_ident-file-result.png)
 
 ---
 
-# Step 8 - Verify pg_hba Rules
+# Step 8 - Verify pg_hba.conf Rules
+
+## Purpose
+
+Verify the authentication rules currently loaded from pg_hba.conf.
 
 ## Commands
 
@@ -188,10 +193,6 @@ SELECT
 FROM pg_hba_file_rules;
 ```
 
-## Purpose
+## Evidence
 
-Verifies that PostgreSQL successfully loaded the authentication rules defined in pg_hba.conf.
-
-## Verification
-
-- pg_ident-file-result.png
+![pg_hba Rules Verification](screenshots/pg_ident-file-result.png)
