@@ -1,56 +1,38 @@
 # PostgreSQL Database Lab Setup Commands
 
-This document contains the commands used to create the sample PostgreSQL database and verify the database objects used throughout the PostgreSQL Administration lab.
+This document contains the SQL commands used to create the sample PostgreSQL database and verify the database objects used throughout the PostgreSQL Administration lab.
 
 ---
 
-# Step 1 - Create Database
+# Step 1 - Create the Database and Schema
 
 ## Purpose
 
-Create the sample database used throughout the PostgreSQL Administration lab.
+Create the PostgreSQL sample database and the application schema used throughout the PostgreSQL Administration lab.
 
-## Command
+## Commands
 
 ```sql
 CREATE DATABASE companydb;
-```
 
-## Evidence
-
-![Database Creation](screenshots/db-schema-table-index-creation.png)
-
----
-
-# Step 2 - Connect to the Database
-
-## Purpose
-
-Connect to the newly created database.
-
-## Command
-
-```sql
 \c companydb
-```
 
-## Evidence
-
-![Database Connection](screenshots/db-schema-table-index-creation.png)
-
----
-
-# Step 3 - Create Schema and Initial Database Objects
-
-## Purpose
-
-Create the application schema and initial database objects.
-
-## Command
-
-```sql
 CREATE SCHEMA company;
 ```
+
+## Evidence
+
+![Database and Schema Creation](screenshots/db-schema-table-index-creation.png)
+
+---
+
+# Step 2 - Create Remaining Tables
+
+## Purpose
+
+Create the remaining business tables required for the sample application.
+
+## Command
 
 The complete SQL script is available in:
 
@@ -58,29 +40,11 @@ The complete SQL script is available in:
 
 ## Evidence
 
-![Schema and Initial Objects](screenshots/db-schema-table-index-creation.png)
+![Table Creation](screenshots/other-tables.png)
 
 ---
 
-# Step 4 - Create Remaining Tables
-
-## Purpose
-
-Create the remaining business tables required for the PostgreSQL Administration lab.
-
-## Command
-
-Refer to:
-
-- `scripts/companydb_lab_setup.sql`
-
-## Evidence
-
-![Remaining Tables](screenshots/other-tables.png)
-
----
-
-# Step 5 - Create Indexes
+# Step 3 - Create Indexes
 
 ## Purpose
 
@@ -88,14 +52,16 @@ Create indexes to improve query performance.
 
 ## Command
 
+The complete SQL script is available in:
+
+- `scripts/companydb_lab_setup.sql`
+
+Example syntax:
+
 ```sql
 CREATE INDEX index_name
 ON table_name(column_name);
 ```
-
-The complete index creation statements are available in:
-
-- `scripts/companydb_lab_setup.sql`
 
 ## Evidence
 
@@ -103,11 +69,11 @@ The complete index creation statements are available in:
 
 ---
 
-# Step 6 - Verify Database Objects
+# Step 4 - Verify Database Objects
 
 ## Purpose
 
-Verify that all database objects were created successfully.
+Verify that the database objects were created successfully.
 
 ## Commands
 
@@ -127,7 +93,30 @@ Verify that all database objects were created successfully.
 
 ---
 
-# Step 7 - Verify Sample Data
+# Step 5 - Create Database Objects
+
+## Purpose
+
+Create the remaining database objects required for the sample application.
+
+## Command
+
+The complete SQL script is available in:
+
+- `scripts/companydb_lab_setup.sql`
+
+The script includes:
+
+- Tables
+- Indexes
+- Views
+- Functions
+- Triggers
+- Sample Data
+
+---
+
+# Step 6 - Verify Sample Data
 
 ## Purpose
 
