@@ -1,18 +1,16 @@
 # PostgreSQL Database Lab Setup Commands
 
-This document contains the SQL commands used to create the sample PostgreSQL database and verify the database objects used throughout the PostgreSQL Administration lab.
+This document contains the SQL commands and verification steps used to create the sample PostgreSQL database and database objects used throughout the PostgreSQL Administration lab.
 
 ---
 
-# Step 1 - Create Database and Database Objects
+# Step 1 - Create Database and Schema
 
 ## Purpose
 
-Create the sample PostgreSQL database together with the database objects required for the PostgreSQL Administration lab.
+Create the sample PostgreSQL database and application schema used throughout the PostgreSQL Administration lab.
 
 ## Commands
-
-Create the database and schema:
 
 ```sql
 CREATE DATABASE companydb;
@@ -22,48 +20,105 @@ CREATE DATABASE companydb;
 CREATE SCHEMA company;
 ```
 
-The complete SQL script used to create the remaining database objects is available in:
+## Evidence
+
+![Database and Schema Creation](screenshots/db-schema-table-index-creation.png)
+
+---
+
+# Step 2 - Create Tables
+
+## Purpose
+
+Create the business tables required for the sample application.
+
+## Command
+
+The complete SQL script is available in:
 
 - `scripts/companydb_lab_setup.sql`
 
-The script includes:
-
-- Schema
-- Tables
-- Constraints
-- Indexes
-- Views
-- Functions
-- Triggers
-- Sample Data
+The script contains the SQL statements used to create all application tables.
 
 ## Evidence
 
-![Database, Schema and Initial Objects](screenshots/db-schema-table-index-creation.png)
+![Table Creation](screenshots/other-tables.png)
 
-![Remaining Tables](screenshots/other-tables.png)
+---
+
+# Step 3 - Create Indexes
+
+## Purpose
+
+Create indexes to improve query performance.
+
+## Command
+
+Example syntax:
+
+```sql
+CREATE INDEX index_name
+ON table_name(column_name);
+```
+
+The complete index creation statements are available in:
+
+- `scripts/companydb_lab_setup.sql`
+
+## Evidence
 
 ![Index Creation](screenshots/index_creation.png)
 
 ---
 
-# Step 2 - Verify Database Objects
+# Step 4 - Create Remaining Database Objects and verify 
 
 ## Purpose
 
-Verify that all database objects were created successfully.
+Create the remaining database objects required for the sample application. Verify that the database objects were created successfully.
+
+## Command
+
+The complete SQL script is available in:
+
+- `scripts/companydb_lab_setup.sql`
+
+The script also includes:
+
+- Views
+- Functions
+- Triggers
+- Sample Data
+
+---
+
+## To Verify Database Objects .
 
 ## Commands
 
 ```sql
 \dt
+```
 
+Lists all tables.
+
+```sql
 \di
+```
 
+Lists all indexes.
+
+```sql
 \dv
+```
 
+Lists all views.
+
+```sql
 \df
 ```
+
+Lists all functions.
 
 ## Evidence
 
@@ -71,7 +126,7 @@ Verify that all database objects were created successfully.
 
 ---
 
-# Step 3 - Verify Sample Data
+# Step 6 - Verify Sample Data
 
 ## Purpose
 
