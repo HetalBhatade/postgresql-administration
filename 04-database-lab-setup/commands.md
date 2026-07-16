@@ -71,11 +71,11 @@ The complete index creation statements are available in:
 
 ---
 
-# Step 4 - Create Remaining Database Objects and verify 
+# Step 4 - Create and Verify Remaining Database Objects
 
 ## Purpose
 
-Create the remaining database objects required for the sample application. Verify that the database objects were created successfully.
+Create the remaining database objects required for the sample application and verify their successful creation.
 
 ## Command
 
@@ -92,33 +92,26 @@ The script also includes:
 
 ---
 
-## To Verify Database Objects .
+## Verify Database Objects
 
-## Commands
+## Verification
+
+Run the following commands to verify that the database objects were created successfully.
 
 ```sql
 \dt
-```
-
-Lists all tables.
-
-```sql
 \di
-```
-
-Lists all indexes.
-
-```sql
 \dv
-```
-
-Lists all views.
-
-```sql
 \df
 ```
 
-Lists all functions.
+Where:
+
+- `\dt` lists tables.
+- `\di` lists indexes.
+- `\dv` lists views.
+- `\df` lists functions.
+
 
 ## Evidence
 
