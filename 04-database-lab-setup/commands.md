@@ -94,8 +94,6 @@ The script also includes:
 
 ## Verify Database Objects
 
-## Verification
-
 Run the following commands to verify that the database objects were created successfully.
 
 ```sql
