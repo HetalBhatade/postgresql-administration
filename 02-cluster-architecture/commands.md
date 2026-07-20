@@ -144,7 +144,7 @@ ls -lrth
 
 ## Purpose
 
-Displays the important directories and files present inside the PostgreSQL data directory.
+Displays some of the important directories and files inside the PostgreSQL data directory.
 
 ## Breakdown
 
@@ -154,7 +154,7 @@ The PostgreSQL data directory contains several important directories and files, 
 - `global` - Stores cluster-wide system catalogs and metadata.
 - `pg_tblspc` - Stores symbolic links for user-defined tablespaces.
 - `pg_wal` - Stores Write-Ahead Log (WAL) files.
-- `log` - Stores PostgreSQL log files (when configured).
+- `log` - log - Stores PostgreSQL log files (when logging is configured)..
 - `postmaster.pid` - Stores information about the running PostgreSQL server process.
 - `postmaster.opts` - Stores the startup options used to start the PostgreSQL server.
 - `pg_hba.conf` - Host-Based Authentication configuration file.
