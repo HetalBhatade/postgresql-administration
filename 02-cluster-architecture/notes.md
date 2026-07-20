@@ -8,6 +8,7 @@ This document explains the PostgreSQL database cluster, data directory structure
 The following diagram illustrates the overall PostgreSQL cluster (PGDATA) directory layout.
 
 ![PostgreSQL Cluster Architecture](screenshots/cluster_architectures-data _directory.png)
+![[PostgreSQL Cluster Architectures](screenshots/cluster_architectures-data _directory.png)
 
 ---
 
