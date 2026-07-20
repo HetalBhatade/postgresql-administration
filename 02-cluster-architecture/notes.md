@@ -2,13 +2,20 @@
 
 This document explains the PostgreSQL database cluster, data directory structure, and the purpose of important directories and files created during database initialization.
 
+
+## PostgreSQL Cluster Overview
+
+The following diagram illustrates the overall PostgreSQL cluster (PGDATA) directory layout.
+
+![PostgreSQL Cluster Architecture](cluster_architectures-data _directory.png)
+
 ---
 
 # PostgreSQL Database Cluster
 
 ## What is a Database Cluster?
 
-In PostgreSQL, a database cluster is a collection of databases managed by a single PostgreSQL server instance.
+In PostgreSQL, a database cluster is a collection of databases managed by a single PostgreSQL server instance. So basically single PostgreSQL server instance together with all databases managed by that instance and the shared data directory containing configuration files, WAL, system catalogs, and metadata.
 
 A cluster is initialized using the `initdb` utility and stores all database files, configuration files, transaction logs, and metadata inside a single data directory.
 
@@ -130,7 +137,7 @@ Key Points
 
 # Log Directory
 
-The `log` directory stores PostgreSQL server log files when logging is configured.
+If logging_collector is enabled, PostgreSQL stores log files in the configured log directory.
 
 Log files help administrators:
 
@@ -179,6 +186,45 @@ It controls:
 This file will be explained in detail in the PostgreSQL Configuration module.
 
 ---
+
+## Other Important Files and Directories
+
+The previous sections covered the most important PostgreSQL directories in detail, including **base/**, **global/**, **pg_tblspc/**, **log/** and **pg_wal/**.
+
+The PostgreSQL data directory (PGDATA) also contains several other files and directories that support transaction management, replication, authentication, logging, and server configuration.
+
+The following table provides a high-level overview of these important files and directories.
+
+## Important Files and Directories
+
+The PostgreSQL data directory (PGDATA) contains various files and subdirectories that store database data, transaction logs, configuration files, and server metadata.
+
+| Directory / File | Purpose | Important Contents |
+|------------------|---------|--------------------|
+| **base/** | Stores database files | One subdirectory per database (OID-based) containing tables, indexes, and other database objects. |
+| **global/** | Stores cluster-wide system catalogs | Global PostgreSQL metadata shared across all databases, including roles and tablespace information. |
+| **pg_wal/** | Stores Write-Ahead Log (WAL) files | WAL segments used for crash recovery, streaming replication, and Point-in-Time Recovery (PITR). |
+| **pg_xact/** | Stores transaction status information | Tracks committed and aborted transactions. |
+| **pg_multixact/** | Stores multi-transaction information | Supports shared row locking by multiple transactions. |
+| **pg_commit_ts/** | Stores commit timestamps (optional) | Stores transaction commit timestamps when `track_commit_timestamp` is enabled. |
+| **pg_subtrans/** | Stores subtransaction information | Maintains parent-child transaction relationships. |
+| **pg_twophase/** | Stores two-phase commit files | Contains prepared transactions used for Two-Phase Commit (2PC). |
+| **pg_tblspc/** | Stores tablespace symbolic links | Links user-defined tablespaces located outside the PGDATA directory. |
+| **pg_stat/** | Stores persistent statistics | Database statistics used by the query planner and monitoring. |
+| **pg_notify/** | Stores LISTEN/NOTIFY information | Maintains notification queue data for asynchronous messaging. |
+| **pg_serial/** | Stores serializable transaction information | Tracks predicate locks used by SERIALIZABLE transaction isolation. |
+| **pg_snapshots/** | Stores exported snapshots | Used by exported transaction snapshots. |
+| **pg_replslot/** | Stores replication slot information | Contains metadata for physical and logical replication slots. |
+| **pg_logical/** | Stores logical replication files | Stores logical decoding and logical replication metadata. |
+| **pg_dynshmem/** | Stores dynamic shared memory files | Used for parallel query execution and dynamic shared memory management. |
+| **pg_hba.conf** | Client authentication configuration | Defines who can connect, from where, and which authentication method is used. |
+| **pg_ident.conf** | User name mapping configuration | Maps operating system users to PostgreSQL roles for peer and ident authentication. |
+| **postgresql.conf** | Main server configuration | Controls memory, networking, WAL, checkpoints, logging, replication, autovacuum, and performance settings. |
+| **postgresql.auto.conf** | Automatic configuration file | Stores configuration changes made using the `ALTER SYSTEM` command. |
+| **PG_VERSION** | PostgreSQL version file | Indicates the major PostgreSQL version of the database cluster. |
+| **postmaster.pid** | Running server information | Stores the server PID, port, socket directory, data directory, and startup information while the server is running. |
+| **postmaster.opts** | Server startup options | Stores the command-line options used to start the PostgreSQL server. |
+| **current_logfiles** | Active log file information | Lists the current log file when the logging collector is enabled. |
 
 # Summary
 
