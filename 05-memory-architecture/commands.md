@@ -39,6 +39,7 @@ These commands display the current values of the most commonly used PostgreSQL m
 
 ![Memory Parameters](screenshots/01-memory-architecture.png)
 
+
 ---
 
 # Step 2 - View Memory Configuration from pg_settings
