@@ -17,7 +17,7 @@ PostgreSQL primarily uses two types of memory:
 
 The following diagram illustrates the major memory components used by PostgreSQL.
 
-![PostgreSQL Memory Architecture](05-memory-architecture/screenshots/Memory achitecture.png)
+![PostgreSQL Memory Architecture](screenshots/Memory achitecture.png)
 
 ---
 
