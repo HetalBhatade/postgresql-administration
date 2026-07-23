@@ -32,7 +32,7 @@ Although it also illustrates background processes and persistent storage, this m
 
 The background processes shown in the diagram are covered separately in the **Background Processes** module.
 
-![PostgreSQL Memory Architecture](screenshots/Memory-achitecture.png.png)
+![PostgreSQL Memory Architecture](screenshots/Memory-achitecture.png)
 
 ---
 
