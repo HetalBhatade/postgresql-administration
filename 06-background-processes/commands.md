@@ -62,4 +62,4 @@ This behavior demonstrates PostgreSQL's built-in process supervision mechanism, 
 
 ## Evidence
 
-![Background Process Recovery](screenshots/02-background-process-restart.png)
+![Background Process Recovery](screenshots/02-killed-process.png)
