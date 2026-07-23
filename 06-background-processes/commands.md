@@ -47,6 +47,9 @@ Verify that PostgreSQL automatically recreates a background process if it unexpe
 Example:
 
 ```bash
+
+Kill <wal_writer_pid>
+OR
 kill -9 <wal_writer_pid>
 
 ps -ef | grep postgres
