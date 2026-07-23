@@ -32,7 +32,7 @@ Typical processes include:
 
 ## Evidence
 
-![Background Processes](screenshots/01-background-processes.png)
+![Background Processes](screenshots/01-background-process.png)
 
 ---
 
