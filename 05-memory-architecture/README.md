@@ -31,4 +31,6 @@ The content is based on hands-on practice together with the PostgreSQL Official 
 - README.md - Overview of the PostgreSQL Memory Architecture module.
 - notes.md - Concepts and explanations of PostgreSQL Memory Architecture.
 - commands.md - SQL commands used to view and verify memory configuration.
-- screenshots/ - Screenshots captured during the lab.
+- screenshots/ - This directory contains screenshots captured while exploring PostgreSQL Memory Architecture.
+
+
