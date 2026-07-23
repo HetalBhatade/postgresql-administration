@@ -37,7 +37,7 @@ These commands display the current values of the most commonly used PostgreSQL m
 
 ## Evidence
 
-![Memory Parameters](screenshots/01-memory-architecture.png)
+![Memory Parameters](screenshots/01-Memory-architecture.png)
 
 
 ---
