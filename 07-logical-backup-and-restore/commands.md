@@ -88,9 +88,12 @@ Check in backup directory if backups exist or not
 
 ![Backup Output](screenshots/pg_dump_command_output.png)
 
+pg_dump options
+![Backup Output](screenshots/pg_dump-option.png)
+
 ---
 
-## Step 3 Verify Backup File
+## Step 3 - Verify Backup File
 
 ### Purpose
 
@@ -102,39 +105,9 @@ Verify that the custom backup file was created successfully.
 
 ---
 
-# Part 2 - Practice Restore Errors
+# Part 2 - Restore Entire Database
 
-## Step 5 - Simulate Restore Failure
-
-### Purpose
-
-Drop the Students table before restoring to understand common restore errors.
-
-### Evidence
-
-![Drop Students Table](screenshots/drop-table-students.png)
-
----
-
-## Step 6 - Attempt Restore
-
-### Purpose
-
-Attempt to restore the backup and observe the reported errors.
-
-### Evidence
-
-![Restore Error](screenshots/restore_error_students_backup.png)
-
-![Restore Error Analysis](screenshots/restore_error_analysis.png)
-
-![Schema/Data Restore Failed](screenshots/schema-data-restor-failed.png)
-
----
-
-# Part 3 - Restore Entire Database
-
-## Step 7 - Drop Existing Database
+## Step 4 - Drop Existing Database
 
 ### Purpose
 
@@ -152,7 +125,7 @@ DROP DATABASE schooldb;
 
 ---
 
-## Step 8 - Restore Database
+## Step 5 - Restore Database
 
 ### Purpose
 
@@ -170,7 +143,7 @@ pg_restore -d schooldb schooldb.backup
 
 ---
 
-## Step 9 - Verify Database Restore
+## Step 6 - Verify Database Restore
 
 ### Purpose
 
@@ -182,71 +155,9 @@ Verify that all database objects and data were restored successfully.
 
 ---
 
-# Part 4 - Backup and Restore Individual Table
+# Part 3 - Backup and Restore Individual Table
 
-## Step 10 - Verify Student Table
-
-### Purpose
-
-Verify the existing data before taking the backup.
-
-### Evidence
-
-![Student Table Count](screenshots/student_table_count.png)
-
----
-
-## Step 11 - Backup Students Table
-
-### Purpose
-
-Create a logical backup of only the Students table.
-
-### Command Syntax
-
-```bash
-pg_dump -t class.students
-```
-
-### Evidence
-
-![Students Table Backup](screenshots/student-table-data-backup.png)
-
----
-
-## Step 12 - Remove Student Data
-
-### Purpose
-
-Truncate the Students table to simulate accidental data loss.
-
-### Evidence
-
-![Truncate Student Table](screenshots/truncatate-table-failed.png)
-
----
-
-## Step 13 - Restore Students Table
-
-### Purpose
-
-Restore the Students table using psql.
-
-### Command Syntax
-
-```bash
-psql -f students_backup.sql
-```
-
-### Evidence
-
-![Students Table Restore](screenshots/psql_restore_table.png)
-
----
-
-# Part 5 - Backup and Restore Another Table
-
-## Step 14 - Backup Teachers Table
+## Step 7 - Backup Teachers Table
 
 ### Purpose
 
@@ -260,7 +171,7 @@ Create a logical backup of the Teachers table.
 
 ---
 
-## Step 15 - Remove Teacher Data
+## Step 8 - Remove Teacher Data
 
 ### Purpose
 
@@ -272,7 +183,7 @@ Truncate the Teachers table before restoring.
 
 ---
 
-## Step 16 - Restore Teachers Table
+## Step 9 - Restore Teachers Table
 
 ### Purpose
 
@@ -284,7 +195,7 @@ Restore the Teachers table from the backup.
 
 ---
 
-## Step 17 - Verify Teacher Restore
+## Step 10 - Verify Teacher Restore
 
 ### Purpose
 
@@ -296,9 +207,9 @@ Verify that all teacher records were restored successfully.
 
 ---
 
-# Part 6 - Backup Compression
+# Part 4 - Backup Compression
 
-## Step 18 - Compress and Split Backup
+## Step 11 - Compress and Split Backup
 
 ### Purpose
 
@@ -318,7 +229,7 @@ split
 
 ---
 
-## Step 19 - Restore Split Backup
+## Step 12 - Restore Split Backup
 
 ### Purpose
 
@@ -336,7 +247,7 @@ cat
 
 ---
 
-## Step 20 - Production Practice
+## Step 13 - Production Practice
 
 ### Purpose
 
@@ -348,9 +259,9 @@ Demonstrate the use of gzip, split, and cat commands to reduce backup size and s
 
 ---
 
-# Part 7 - Backup Entire PostgreSQL Cluster
+# Part 5 - Backup Entire PostgreSQL Cluster
 
-## Step 21 - Backup All Databases
+## Step 1 - Backup All Databases
 
 ### Purpose
 
@@ -359,16 +270,19 @@ Create a logical backup of the entire PostgreSQL cluster using pg_dumpall.
 ### Command Syntax
 
 ```bash
-pg_dumpall
+pg_dumpall -f <output_file.sql>
 ```
 
 ### Evidence
 
 ![pg_dumpall Backup](screenshots/pg_dumpall_backup.png)
 
+You can use  below option for this for this 
+
+![pg_dumpall Backup](screenshots/pg_dumpall_options.png)
 ---
 
-## Step 22 - Backup Global Objects
+## Step 2 - Backup Global Objects
 
 ### Purpose
 
@@ -377,7 +291,7 @@ Backup PostgreSQL global objects such as roles and tablespaces.
 ### Command Syntax
 
 ```bash
-pg_dumpall --globals-only
+pg_dumpall --globals-only -f <output_file.sql>
 ```
 
 ### Evidence
@@ -386,7 +300,7 @@ pg_dumpall --globals-only
 
 ---
 
-## Step 23 - Restore Global Objects
+## Step 3 - Restore Global Objects
 
 ### Purpose
 
@@ -395,7 +309,7 @@ Restore PostgreSQL global objects from the backup.
 ### Command Syntax
 
 ```bash
-psql -f globals.sql
+psql -f <backup_file.sql>
 ```
 
 ### Evidence
