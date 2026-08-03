@@ -292,7 +292,7 @@ Verify that all teacher records were restored successfully.
 
 ### Evidence
 
-![Teacher Count](screenshots/4-teacher-count-after-restore.png)
+![Teacher Count](screenshots/5-teacher-count-after-restore.png)
 
 ---
 
