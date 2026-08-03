@@ -240,7 +240,7 @@ Merge the split files using cat and restore the backup.
 ### Command Syntax
 
 ```bash
-cat <output_prefix>* | gunzip | psql -d <database_name>
+cat <output_prefix>* | psql -d <database_name>
 
 ```
 
@@ -258,7 +258,6 @@ Demonstrate the use of gzip, split, and cat commands to reduce backup size and s
 
 ### Command Syntax
 ```bash
-cat <output_prefix>* | gunzip | psql -d <database_name>
 pg_dump -d <database_name> | gzip | split -b <size> - <output_prefix>
 ```
 
