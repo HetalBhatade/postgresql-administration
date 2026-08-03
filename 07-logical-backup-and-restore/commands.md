@@ -28,7 +28,7 @@ cd backup
 
 ---
 
-## Step 2 - Take Full Database Backup (Custom Format)
+## Step 2 - Take Backup using various format  
 
 ### Purpose
 
@@ -37,7 +37,45 @@ Create a logical backup of the SchoolDB database using pg_dump in Custom format.
 ### Command Syntax
 
 ```bash
-pg_dump -Fc -d schooldb -f schooldb.backup
+# Plain SQL Backup
+pg_dump -d <database_name> -f <output_file.sql>
+
+# Tar Format Backup
+pg_dump -Ft -d <database_name> -f <output_file.tar>
+
+# Directory Format Backup
+pg_dump -Fd -d <database_name> -f <output_directory>
+
+# Custom Format Backup
+pg_dump -Fc -d <database_name> -f <output_file.backup>
+
+# Backup a Specific Table
+pg_dump -d <database_name> -t <schema_name.table_name> -f <output_file.sql>
+
+# Backup Multiple Tables
+pg_dump -d <database_name> \
+-t <schema.table1> \
+-t <schema.table2> \
+-t <schema.table3> \
+-f <output_file.sql>
+
+# Backup a Specific Schema
+pg_dump -d <database_name> -n <schema_name> -f <output_file.sql>
+
+# Exclude a Table
+pg_dump -d <database_name> -T <schema_name.table_name> -f <output_file.sql>
+
+# Verbose Backup
+pg_dump -v -d <database_name> -f <output_file.sql>
+
+# Compressed Custom Format Backup
+pg_dump -Fc -Z<compression_level> -d <database_name> -f <output_file.backup>
+
+# Schema-Only Backup
+pg_dump -s -d <database_name> -f <output_file.sql>
+
+# Data-Only Backup
+pg_dump -a -d <database_name> -f <output_file.sql>
 ```
 
 ### Evidence
@@ -46,23 +84,13 @@ pg_dump -Fc -d schooldb -f schooldb.backup
 
 ![pg_dump Command Output](screenshots/02-pg_dump_command.png)
 
+Check in backup directory if backups exist or not 
+
 ![Backup Output](screenshots/pg_dump_command_output.png)
 
 ---
 
-## Step 3 - Resolve Backup Path Issue
-
-### Purpose
-
-Resolve the issue encountered while saving the backup in the desired directory.
-
-### Evidence
-
-![Home Directory Issue](screenshots/home-directory-issue.png)
-
----
-
-## Step 4 - Verify Backup File
+## Step 3 Verify Backup File
 
 ### Purpose
 
