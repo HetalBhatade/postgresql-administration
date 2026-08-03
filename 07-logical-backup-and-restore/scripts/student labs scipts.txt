@@ -1,0 +1,178 @@
+Step 1: Create Database
+CREATE DATABASE schooldb;
+
+Connect to it:
+\c schooldb
+
+Step 2: Create Schema
+CREATE SCHEMA class;
+
+Step 3: Create Tables
+Teachers
+CREATE TABLE class.teachers
+(
+    teacher_id SERIAL PRIMARY KEY,
+    teacher_name VARCHAR(100) NOT NULL,
+    subject_specialization VARCHAR(50),
+    email VARCHAR(100) UNIQUE,
+    phone VARCHAR(20),
+    joining_date DATE
+);
+
+Subjects
+CREATE TABLE class.subjects
+(
+    subject_id SERIAL PRIMARY KEY,
+    subject_name VARCHAR(50) NOT NULL,
+    teacher_id INT REFERENCES class.teachers(teacher_id)
+);
+Students
+CREATE TABLE class.students
+(
+    student_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    gender CHAR(1),
+    dob DATE,
+    class_name VARCHAR(20),
+    email VARCHAR(100),
+    phone VARCHAR(20),
+    admission_date DATE
+);
+Activities
+CREATE TABLE class.activities
+(
+    activity_id SERIAL PRIMARY KEY,
+    activity_name VARCHAR(50),
+    activity_type VARCHAR(50)
+);
+Student Subjects
+CREATE TABLE class.student_subjects
+(
+    student_subject_id SERIAL PRIMARY KEY,
+    student_id INT REFERENCES class.students(student_id),
+    subject_id INT REFERENCES class.subjects(subject_id)
+);
+Student Activities
+CREATE TABLE class.student_activities
+(
+    student_activity_id SERIAL PRIMARY KEY,
+    student_id INT REFERENCES class.students(student_id),
+    activity_id INT REFERENCES class.activities(activity_id)
+);
+Exams
+CREATE TABLE class.exams
+(
+    exam_id SERIAL PRIMARY KEY,
+    subject_id INT REFERENCES class.subjects(subject_id),
+    exam_name VARCHAR(50),
+    exam_date DATE
+);
+Results
+CREATE TABLE class.results
+(
+    result_id SERIAL PRIMARY KEY,
+    exam_id INT REFERENCES class.exams(exam_id),
+    student_id INT REFERENCES class.students(student_id),
+    marks NUMERIC(5,2),
+    grade CHAR(2)
+);
+Step 4: Create Indexes
+CREATE INDEX idx_students_class
+ON class.students(class_name);
+CREATE INDEX idx_subject_teacher
+ON class.subjects(teacher_id);
+CREATE INDEX idx_results_student
+ON class.results(student_id);
+CREATE INDEX idx_results_exam
+ON class.results(exam_id);
+Step 5: Create View
+CREATE VIEW class.student_result_view AS
+SELECT
+s.student_id,
+s.first_name,
+s.last_name,
+e.exam_name,
+sub.subject_name,
+r.marks,
+r.grade
+FROM class.students s
+JOIN class.results r
+ON s.student_id=r.student_id
+JOIN class.exams e
+ON r.exam_id=e.exam_id
+JOIN class.subjects sub
+ON e.subject_id=sub.subject_id;
+Step 6: Create Function
+CREATE OR REPLACE FUNCTION class.get_total_students()
+RETURNS INTEGER
+LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    RETURN (SELECT COUNT(*) FROM class.students);
+END;
+$$;
+Step 7: Create Audit Table
+CREATE TABLE class.audit_log
+(
+    log_id SERIAL PRIMARY KEY,
+    table_name TEXT,
+    operation TEXT,
+    changed_by TEXT,
+    changed_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+Step 8: Create Trigger Function
+CREATE OR REPLACE FUNCTION class.audit_student()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    INSERT INTO class.audit_log
+    (
+        table_name,
+        operation,
+        changed_by
+    )
+    VALUES
+    (
+        'students',
+        TG_OP,
+        CURRENT_USER
+    );
+
+    RETURN NEW;
+END;
+$$;
+Step 9: Create Trigger
+CREATE TRIGGER trg_student_audit
+AFTER INSERT OR UPDATE OR DELETE
+ON class.students
+FOR EACH ROW
+EXECUTE FUNCTION class.audit_student();
+
+individual count
+SELECT COUNT(*) FROM class.teachers;
+SELECT COUNT(*) FROM class.subjects;
+SELECT COUNT(*) FROM class.students;
+SELECT COUNT(*) FROM class.activities;
+SELECT COUNT(*) FROM class.student_subjects;
+SELECT COUNT(*) FROM class.student_activities;
+SELECT COUNT(*) FROM class.exams;
+SELECT COUNT(*) FROM class.results;
+SELECT COUNT(*) FROM class.audit_log;
+
+
+SELECT
+    (SELECT COUNT(*) FROM class.teachers) AS teachers,
+    (SELECT COUNT(*) FROM class.subjects) AS subjects,
+    (SELECT COUNT(*) FROM class.students) AS students,
+    (SELECT COUNT(*) FROM class.activities) AS activities,
+    (SELECT COUNT(*) FROM class.student_subjects) AS student_subjects,
+    (SELECT COUNT(*) FROM class.student_activities) AS student_activities,
+    (SELECT COUNT(*) FROM class.exams) AS exams,
+    (SELECT COUNT(*) FROM class.results) AS results,
+    (SELECT COUNT(*) FROM class.audit_log) AS audit_log;
+
+
