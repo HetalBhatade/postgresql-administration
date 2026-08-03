@@ -220,9 +220,9 @@ Compress the backup using gzip and split the compressed file into multiple parts
 ### Command Syntax
 
 ```bash
-gzip
+pg_dump -d <database_name> | gzip > <backup_file.sql.gz>
 
-split
+pg_dump -d <database_name> | split -b <size> <backup_file> <output_prefix>
 ```
 
 ### Evidence
@@ -240,7 +240,8 @@ Merge the split files using cat and restore the backup.
 ### Command Syntax
 
 ```bash
-cat
+cat <output_prefix>* | gunzip | psql -d <database_name>
+
 ```
 
 ### Evidence
@@ -254,6 +255,12 @@ cat
 ### Purpose
 
 Demonstrate the use of gzip, split, and cat commands to reduce backup size and simplify the transfer of large backup files in production environments.
+
+### Command Syntax
+```bash
+cat <output_prefix>* | gunzip | psql -d <database_name>
+pg_dump -d <database_name> | gzip | split -b <size> - <output_prefix>
+```
 
 ### Evidence
 
