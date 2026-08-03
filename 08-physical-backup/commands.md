@@ -40,7 +40,7 @@ The complete command sequence is available in:
 
 ### Evidence
 
-![Filesystem Backup](screenshots/02-triggered-backup-connect.png)
+![Filesystem Backup](screenshots/02-triggered-backup.png)
 
 ---
 
@@ -58,7 +58,7 @@ The complete command sequence is available in:
 
 ### Evidence
 
-![Backup Verification](screenshots/03-backup-success-verify.png)
+![Backup Verification](screenshots/03-backup_success-verify.png)
 
 ---
 
