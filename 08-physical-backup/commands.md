@@ -22,7 +22,7 @@ The complete command sequence is available in:
 
 ### Evidence
 
-![Stop PostgreSQL Server](screenshots/01-stop server.png)
+![Stop PostgreSQL Server](screenshots/01-stop-server.png)
 
 ---
 
