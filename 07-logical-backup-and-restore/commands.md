@@ -89,9 +89,13 @@ Check in backup directory if backups exist or not
 ![Backup Output](screenshots/pg_dump_command_output.png)
 
 pg_dump options
+
 ![Backup Output](screenshots/pg_dump-option.png)
 
 ---
+
+
+# Part 2 - Restore Entire Database
 
 ## Step 3 - Verify Backup File
 
@@ -104,8 +108,6 @@ Verify that the custom backup file was created successfully.
 ![Custom Backup](screenshots/schooldb-full-cutom-backup.png)
 
 ---
-
-# Part 2 - Restore Entire Database
 
 ## Step 4 - Drop Existing Database
 
