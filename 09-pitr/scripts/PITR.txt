@@ -1,0 +1,487 @@
+====================================================================
+POSTGRESQL POINT-IN-TIME RECOVERY (PITR)
+====================================================================
+
+Database:
+companydb
+
+PostgreSQL Version:
+16
+
+
+====================================================================
+PHASE 1 - VERIFY WAL ARCHIVING
+====================================================================
+
+STEP 1 - CHECK POSTGRESQL WAL AND ARCHIVING SETTINGS
+--------------------------------------------------------------------
+
+Purpose:
+Verify that WAL archiving is enabled and configured correctly.
+
+Commands:
+
+SHOW wal_level;
+
+SHOW archive_mode;
+
+SHOW archive_command;
+
+
+Expected:
+
+wal_level       | replica
+archive_mode    | on
+archive_command | cp %p /var/lib/pgsql/16/archive/%f
+
+
+--------------------------------------------------------------------
+STEP 2 - CHECK WAL ARCHIVER STATUS
+--------------------------------------------------------------------
+
+Purpose:
+Check whether PostgreSQL is successfully archiving WAL segments.
+
+Command:
+
+SELECT *
+FROM pg_stat_archiver;
+
+
+Check:
+
+archived_count > 0
+failed_count = 0
+
+
+====================================================================
+PHASE 2 - TAKE A FRESH BASE BACKUP
+====================================================================
+
+STEP 3 - CREATE PITR BASE BACKUP DIRECTORY
+--------------------------------------------------------------------
+
+Purpose:
+Create a dedicated directory for the physical base backup.
+
+Commands:
+
+sudo mkdir -p /var/lib/pgsql/16/pitr_basebackup
+
+sudo chown postgres:postgres /var/lib/pgsql/16/pitr_basebackup
+
+sudo chmod 700 /var/lib/pgsql/16/pitr_basebackup
+
+
+--------------------------------------------------------------------
+STEP 4 - TAKE PHYSICAL BASE BACKUP
+--------------------------------------------------------------------
+
+Purpose:
+Take a physical base backup using pg_basebackup.
+
+Command:
+
+sudo -u postgres pg_basebackup -D /var/lib/pgsql/16/pitr_basebackup -Fp -X stream -P
+
+
+--------------------------------------------------------------------
+STEP 5 - VERIFY BASE BACKUP
+--------------------------------------------------------------------
+
+Purpose:
+Verify that the base backup files were created successfully.
+
+Command:
+
+ls -l /var/lib/pgsql/16/pitr_basebackup
+
+
+====================================================================
+PHASE 3 - GENERATE TRANSACTIONS
+====================================================================
+
+STEP 6 - CONNECT TO COMPANYDB
+--------------------------------------------------------------------
+
+Purpose:
+Connect to the database used for the PITR test.
+
+Command:
+
+sudo -u postgres psql companydb
+
+
+--------------------------------------------------------------------
+STEP 7 - CREATE PITR TEST TABLE
+--------------------------------------------------------------------
+
+Purpose:
+Create a test table that will be used to demonstrate PITR.
+
+Command:
+
+CREATE TABLE pitr_test
+(
+    id INT,
+    name TEXT
+);
+
+
+--------------------------------------------------------------------
+STEP 8 - INSERT INITIAL DATA
+--------------------------------------------------------------------
+
+Purpose:
+Insert the initial records that should be available during recovery.
+
+Command:
+
+INSERT INTO pitr_test
+VALUES
+(1,'John'),
+(2,'Mary'),
+(3,'David');
+
+
+--------------------------------------------------------------------
+STEP 9 - VERIFY INITIAL DATA
+--------------------------------------------------------------------
+
+Command:
+
+SELECT *
+FROM pitr_test;
+
+
+====================================================================
+PHASE 4 - FORCE WAL SWITCH AND VERIFY ARCHIVING
+====================================================================
+
+STEP 10 - FORCE WAL SWITCH
+--------------------------------------------------------------------
+
+Purpose:
+Force PostgreSQL to switch to a new WAL segment.
+
+Command:
+
+SELECT pg_switch_wal();
+
+
+--------------------------------------------------------------------
+STEP 11 - VERIFY WAL ARCHIVING
+--------------------------------------------------------------------
+
+Command:
+
+SELECT archived_count, last_archived_wal, last_archived_time FROM pg_stat_archiver;
+
+
+====================================================================
+PHASE 5 - RECORD RECOVERY TIME
+====================================================================
+
+STEP 12 - RECORD RECOVERY TARGET TIME
+--------------------------------------------------------------------
+
+Purpose:
+Record the timestamp that will be used as the PITR recovery target.
+
+Command:
+
+SELECT now();
+
+
+Example:
+
+2026-07-19 18:42:30
+
+
+IMPORTANT:
+
+Save the timestamp returned by this command.
+
+This timestamp will be used later as:
+
+recovery_target_time
+
+
+====================================================================
+PHASE 6 - GENERATE MORE TRANSACTIONS
+====================================================================
+
+STEP 13 - INSERT ADDITIONAL RECORDS
+--------------------------------------------------------------------
+
+Purpose:
+Generate additional database changes after the recovery target
+timestamp.
+
+Command:
+
+INSERT INTO pitr_test
+VALUES
+(4,'Scott'),
+(5,'Allen'),
+(6,'James');
+
+
+--------------------------------------------------------------------
+STEP 14 - VERIFY ADDITIONAL DATA
+--------------------------------------------------------------------
+
+Command:
+
+SELECT *
+FROM pitr_test;
+
+
+--------------------------------------------------------------------
+STEP 15 - FORCE ANOTHER WAL SWITCH
+--------------------------------------------------------------------
+
+Command:
+
+SELECT pg_switch_wal();
+
+
+--------------------------------------------------------------------
+STEP 16 - VERIFY WAL ARCHIVING
+--------------------------------------------------------------------
+
+Command:
+
+SELECT archived_count, last_archived_wal, last_archived_time FROM pg_stat_archiver;
+
+
+====================================================================
+PHASE 7 - SIMULATE USER ERROR
+====================================================================
+
+STEP 17 - DROP PITR TEST TABLE
+--------------------------------------------------------------------
+
+Purpose:
+Simulate an accidental user operation that needs to be recovered.
+
+Command:
+
+DROP TABLE pitr_test;
+
+
+--------------------------------------------------------------------
+STEP 18 - VERIFY TABLE WAS DROPPED
+--------------------------------------------------------------------
+
+Command:
+
+\dt
+
+
+Expected:
+
+The pitr_test table should no longer be listed.
+
+
+====================================================================
+PHASE 8 - STOP POSTGRESQL
+====================================================================
+
+STEP 19 - STOP POSTGRESQL SERVER
+--------------------------------------------------------------------
+
+Purpose:
+Stop PostgreSQL before restoring the physical base backup.
+
+Command:
+
+sudo systemctl stop postgresql-16
+
+
+====================================================================
+PHASE 9 - RENAME CURRENT DATA DIRECTORY
+====================================================================
+
+STEP 20 - MOVE CURRENT DATA DIRECTORY
+--------------------------------------------------------------------
+
+Purpose:
+Preserve the current data directory before restoring the base backup.
+
+Command:
+
+sudo mv /var/lib/pgsql/16/data /var/lib/pgsql/16/data_old
+
+
+====================================================================
+PHASE 10 - RESTORE THE BASE BACKUP
+====================================================================
+
+STEP 21 - RESTORE PHYSICAL BASE BACKUP
+--------------------------------------------------------------------
+
+Purpose:
+Restore the physical base backup into the PostgreSQL data directory.
+
+Command:
+
+sudo cp -a /var/lib/pgsql/16/pitr_basebackup/. /var/lib/pgsql/16/data/
+
+
+--------------------------------------------------------------------
+STEP 22 - FIX DATA DIRECTORY OWNERSHIP
+--------------------------------------------------------------------
+
+Purpose:
+Ensure that the PostgreSQL operating-system user owns the restored
+data directory.
+
+Command:
+
+sudo chown -R postgres:postgres /var/lib/pgsql/16/data
+
+
+====================================================================
+PHASE 11 - CONFIGURE RECOVERY
+====================================================================
+
+STEP 23 - EDIT RECOVERY CONFIGURATION
+--------------------------------------------------------------------
+
+Purpose:
+Configure PostgreSQL to retrieve archived WAL and stop recovery at
+the selected recovery target.
+
+Command:
+
+sudo vi /var/lib/pgsql/16/data/postgresql.auto.conf
+
+
+Add:
+
+restore_command = 'cp /var/lib/pgsql/16/archive/%f %p'
+
+recovery_target_time = '2026-07-19 18:42:30'
+
+recovery_target_action = 'promote'
+
+
+IMPORTANT:
+
+Replace the example timestamp with the timestamp recorded during
+STEP 12.
+
+
+====================================================================
+PHASE 12 - CREATE RECOVERY SIGNAL
+====================================================================
+
+STEP 24 - CREATE recovery.signal
+--------------------------------------------------------------------
+
+Purpose:
+Tell PostgreSQL to start recovery when the server starts.
+
+Command:
+
+sudo touch /var/lib/pgsql/16/data/recovery.signal
+
+
+--------------------------------------------------------------------
+STEP 25 - SET recovery.signal OWNERSHIP
+--------------------------------------------------------------------
+
+Command:
+
+sudo chown postgres:postgres /var/lib/pgsql/16/data/recovery.signal
+
+
+====================================================================
+PHASE 13 - START POSTGRESQL
+====================================================================
+
+STEP 26 - START POSTGRESQL SERVER
+--------------------------------------------------------------------
+
+Purpose:
+Start PostgreSQL and allow it to replay the archived WAL.
+
+Command:
+
+sudo systemctl start postgresql-16
+
+
+--------------------------------------------------------------------
+STEP 27 - CHECK POSTGRESQL STATUS
+--------------------------------------------------------------------
+
+Command:
+
+sudo systemctl status postgresql-16
+
+
+====================================================================
+PHASE 14 - VERIFY PITR
+====================================================================
+
+STEP 28 - CONNECT TO COMPANYDB
+--------------------------------------------------------------------
+
+Command:
+
+sudo -u postgres psql companydb
+
+
+--------------------------------------------------------------------
+STEP 29 - VERIFY RECOVERED TABLE
+--------------------------------------------------------------------
+
+Purpose:
+Verify that the pitr_test table has been recovered.
+
+Command:
+
+SELECT *
+FROM pitr_test;
+
+
+Expected:
+
+The pitr_test table exists.
+
+Records committed before the recovery target time should be present.
+
+The DROP TABLE operation should not be present in the recovered
+state because recovery stopped at the selected recovery target.
+
+
+====================================================================
+PHASE 15 - VERIFY RECOVERY COMPLETED
+====================================================================
+
+STEP 30 - CHECK RECOVERY STATUS
+--------------------------------------------------------------------
+
+Purpose:
+Verify that PostgreSQL has completed recovery.
+
+Command:
+
+SELECT pg_is_in_recovery();
+
+
+Expected:
+
+f
+
+
+Meaning:
+
+PostgreSQL has completed recovery and has been promoted to a normal
+primary server.
+
+
+====================================================================
+END OF PITR LAB
+====================================================================
