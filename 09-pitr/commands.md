@@ -313,6 +313,9 @@ Fix ownership:
 ```bash
 sudo chown -R postgres:postgres /var/lib/pgsql/16/data
 ```
+## Evidence
+
+![WAL Archiving Verification](screenshots/restore-backup.png)
 
 ---
 
