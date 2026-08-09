@@ -242,7 +242,7 @@ The complete command sequence is available in:
 
 ### Evidence
 
-![Enable Backup Mode](screenshots/02-enable-backupmode.png)
+![Enable Backup Mode](screenshots/-02-enable-backupmode.png)
 
 ---
 
