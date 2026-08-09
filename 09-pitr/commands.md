@@ -69,11 +69,7 @@ sudo chmod 700 /var/lib/pgsql/16/pitr_basebackup
 Take the physical base backup:
 
 ```bash
-sudo -u postgres pg_basebackup \
--D /var/lib/pgsql/16/pitr_basebackup \
--Fp \
--X stream \
--P
+sudo -u postgres pg_basebackup -D /var/lib/pgsql/16/pitr_basebackup -Fp -X stream -P
 ```
 
 Verify the backup:
@@ -161,8 +157,6 @@ FROM pg_stat_archiver;
 ## Evidence
 
 ![WAL Switch](screenshots/04-pitr-table-switch-wal.png)
-
-![WAL Archiver Status](screenshots/05-pg_stat_wal_archiver_table.png)
 
 ---
 
@@ -293,8 +287,7 @@ Preserve the existing PostgreSQL data directory before restoring the PITR base b
 ## Command
 
 ```bash
-sudo mv /var/lib/pgsql/16/data \
-/var/lib/pgsql/16/data_old
+sudo mv /var/lib/pgsql/16/data /var/lib/pgsql/16/data_old
 ```
 
 ## Evidence
@@ -312,16 +305,13 @@ Restore the physical base backup into the PostgreSQL data directory.
 ## Commands
 
 ```bash
-sudo cp -a \
-/var/lib/pgsql/16/pitr_basebackup/. \
-/var/lib/pgsql/16/data/
+sudo cp -a /var/lib/pgsql/16/pitr_basebackup/. /var/lib/pgsql/16/data/
 ```
 
 Fix ownership:
 
 ```bash
-sudo chown -R postgres:postgres \
-/var/lib/pgsql/16/data
+sudo chown -R postgres:postgres /var/lib/pgsql/16/data
 ```
 
 ---
@@ -409,7 +399,7 @@ sudo systemctl status postgresql-16
 
 ## Evidence
 
-![PostgreSQL Server Started](screenshots/13-start-server.png)
+![PostgreSQL Server Started](screenshots/12-start-server.png)
 
 ---
 
@@ -442,7 +432,7 @@ Expected:
 
 ## Evidence
 
-![PITR Recovery Verification](screenshots/14-verify-PITR.png)
+![PITR Recovery Verification](screenshots/12-verify-PITR.png)
 
 ---
 
