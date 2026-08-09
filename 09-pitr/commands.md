@@ -1,550 +1,471 @@
-====================================================================
-PostgreSQL Point-in-Time Recovery (PITR) - Lab Commands
-====================================================================
+# PostgreSQL Point-in-Time Recovery (PITR) Commands
 
-Database used:
-companydb
+This document contains the commands used during the PostgreSQL PITR lab.
 
-PostgreSQL version:
-16
+The lab demonstrates recovery of the `companydb` database to a specific point in time using a physical base backup and archived WAL files.
 
-Purpose:
-These commands demonstrate PostgreSQL Point-in-Time Recovery using
-a physical base backup and archived WAL files.
+---
 
-====================================================================
-PHASE 1 - VERIFY WAL ARCHIVING
-====================================================================
+# Step 1 - Verify WAL Archiving
 
-STEP 1 - Check WAL and Archiving Configuration
---------------------------------------------------------------------
+## Purpose
 
-Purpose:
-Verify that WAL archiving is enabled and that the PostgreSQL server
-is configured to generate WAL suitable for PITR.
+Verify that WAL archiving is enabled and PostgreSQL is configured correctly for PITR.
 
-Commands:
+## Commands
 
+```sql
 SHOW wal_level;
 
 SHOW archive_mode;
 
 SHOW archive_command;
+```
 
+Check the WAL archiver:
 
-Expected configuration:
-
-wal_level       | replica
-archive_mode    | on
-archive_command | cp %p /var/lib/pgsql/16/archive/%f
-
-
-Evidence:
-screenshots/01-verify-archive.png
-
-
-STEP 2 - Check WAL Archiver Status
---------------------------------------------------------------------
-
-Purpose:
-Verify whether WAL segments are being archived successfully.
-
-Command:
-
+```sql
 SELECT archived_count,
        failed_count,
        last_archived_wal,
        last_archived_time
 FROM pg_stat_archiver;
+```
 
+## Expected
 
-Check that:
+```text
+wal_level       | replica
+archive_mode    | on
+archive_command | cp %p /var/lib/pgsql/16/archive/%f
+```
 
-archived_count > 0
-failed_count = 0
+`archived_count` should show successfully archived WAL segments and `failed_count` should not continuously increase.
 
+## Evidence
 
-Evidence:
-screenshots/01-verify-archive.png
+![WAL Archiving Verification](screenshots/01-verify-archive.png)
 
+---
 
-====================================================================
-PHASE 2 - TAKE A FRESH BASE BACKUP
-====================================================================
+# Step 2 - Create PITR Base Backup
 
-STEP 3 - Create PITR Base Backup Directory
---------------------------------------------------------------------
+## Purpose
 
-Purpose:
-Create a dedicated directory to store the physical base backup.
+Create a dedicated directory and take a fresh physical base backup that will be used as the starting point for PITR.
 
-Commands:
+## Commands
 
+Create the backup directory:
+
+```bash
 sudo mkdir -p /var/lib/pgsql/16/pitr_basebackup
 
 sudo chown postgres:postgres /var/lib/pgsql/16/pitr_basebackup
 
 sudo chmod 700 /var/lib/pgsql/16/pitr_basebackup
+```
 
+Take the physical base backup:
 
-Evidence:
-screenshots/02-create-backup-dir.png
-
-
-STEP 4 - Take Physical Base Backup
---------------------------------------------------------------------
-
-Purpose:
-Create a physical base backup using pg_basebackup.
-
-Command:
-
+```bash
 sudo -u postgres pg_basebackup \
 -D /var/lib/pgsql/16/pitr_basebackup \
 -Fp \
 -X stream \
 -P
+```
 
+Verify the backup:
 
-Evidence:
-screenshots/03-basebackup.png
+```bash
+ls -l /var/lib/pgsql/16/pitr_basebackup
+```
 
+## Evidence
 
-STEP 5 - Verify Base Backup
---------------------------------------------------------------------
+![PITR Base Backup Directory](screenshots/02-create-backup-dir.png)
 
-Purpose:
-Verify that the base backup files were created successfully.
+![PITR Base Backup](screenshots/03-basebackup.png)
 
-Command:
+---
 
-ls -lrth /var/lib/pgsql/16/pitr_basebackup
+# Step 3 - Generate Initial PITR Test Data
 
+## Purpose
 
-Evidence:
-screenshots/03-basebackup.png
+Create a test table and insert initial records that will be available before the selected recovery point.
 
+## Commands
 
-====================================================================
-PHASE 3 - GENERATE TRANSACTIONS
-====================================================================
+Connect to `companydb`:
 
-STEP 6 - Connect to companydb
---------------------------------------------------------------------
-
-Purpose:
-Connect to the database where the PITR test will be performed.
-
-Command:
-
+```bash
 sudo -u postgres psql companydb
+```
 
+Create the test table:
 
-STEP 7 - Create PITR Test Table
---------------------------------------------------------------------
-
-Purpose:
-Create a test table that will be used to demonstrate recovery.
-
-Command:
-
+```sql
 CREATE TABLE pitr_test
 (
     id INT,
     name TEXT
 );
+```
 
+Insert initial records:
 
-STEP 8 - Insert Initial Data
---------------------------------------------------------------------
-
-Purpose:
-Insert the initial records that should exist in the recovered
-database.
-
-Command:
-
+```sql
 INSERT INTO pitr_test
 VALUES
 (1,'John'),
 (2,'Mary'),
 (3,'David');
-
+```
 
 Verify:
 
-SELECT * FROM pitr_test;
+```sql
+SELECT *
+FROM pitr_test;
+```
 
+## Evidence
 
-Evidence:
-screenshots/04-pitr-table-switch-wal.png
+![PITR Test Table and Data](screenshots/04-pitr-table-switch-wal.png)
 
+---
 
-====================================================================
-PHASE 4 - FORCE WAL ARCHIVING
-====================================================================
+# Step 4 - Force WAL Switch and Verify Archiving
 
-STEP 9 - Switch WAL
---------------------------------------------------------------------
+## Purpose
 
-Purpose:
-Force PostgreSQL to switch to a new WAL segment so that the
-completed WAL segment can be archived.
+Force a WAL segment switch and verify that the WAL archiver is processing WAL files.
 
-Command:
+## Commands
 
+```sql
 SELECT pg_switch_wal();
+```
 
+Verify the archiver:
 
-STEP 10 - Verify WAL Archiving
---------------------------------------------------------------------
-
-Command:
-
+```sql
 SELECT archived_count,
        last_archived_wal,
        last_archived_time
 FROM pg_stat_archiver;
+```
 
+## Evidence
 
-Evidence:
-screenshots/04-pitr-table-switch-wal.png
-screenshots/05-pg_stat_wal_archiver_table.png
+![WAL Switch](screenshots/04-pitr-table-switch-wal.png)
 
+![WAL Archiver Status](screenshots/05-pg_stat_wal_archiver_table.png)
 
-====================================================================
-PHASE 5 - RECORD RECOVERY TARGET
-====================================================================
+---
 
-STEP 11 - Record Recovery Time
---------------------------------------------------------------------
+# Step 5 - Record Recovery Target Time
 
-Purpose:
+## Purpose
+
 Record the timestamp that will be used as the PITR recovery target.
 
-Command:
+## Command
 
+```sql
 SELECT now();
+```
 
-
-IMPORTANT:
-
-Save the timestamp returned by this command.
+Save the timestamp returned by PostgreSQL.
 
 Example:
 
+```text
 2026-07-19 18:42:30
+```
 
+This timestamp will later be configured as `recovery_target_time`.
 
-Evidence:
-screenshots/06-recovery-time.png
+## Evidence
 
+![Recovery Time](screenshots/06-recovery-time.png)
 
-====================================================================
-PHASE 6 - GENERATE MORE TRANSACTIONS
-====================================================================
+---
 
-STEP 12 - Insert Additional Records
---------------------------------------------------------------------
+# Step 6 - Generate Additional Transactions
 
-Purpose:
-Generate additional database changes after the selected recovery
-point.
+## Purpose
 
-Command:
+Generate additional database changes after the recovery target time.
 
+## Commands
+
+Insert additional records:
+
+```sql
 INSERT INTO pitr_test
 VALUES
 (4,'Scott'),
 (5,'Allen'),
 (6,'James');
-
+```
 
 Verify:
 
-SELECT * FROM pitr_test;
+```sql
+SELECT *
+FROM pitr_test;
+```
 
+Force another WAL switch:
 
-Evidence:
-screenshots/07-insert-record.png
-
-
-STEP 13 - Force Another WAL Switch
---------------------------------------------------------------------
-
-Command:
-
+```sql
 SELECT pg_switch_wal();
+```
 
+Verify archiving:
 
-Verify:
-
+```sql
 SELECT archived_count,
        last_archived_wal,
        last_archived_time
 FROM pg_stat_archiver;
+```
 
+## Evidence
 
-====================================================================
-PHASE 7 - SIMULATE USER ERROR
-====================================================================
+![Additional PITR Records](screenshots/07-insert-record.png)
 
-STEP 14 - Drop Test Table
---------------------------------------------------------------------
+---
 
-Purpose:
-Simulate an accidental user operation that needs to be recovered.
+# Step 7 - Simulate User Error
 
-Command:
+## Purpose
 
+Simulate an accidental database operation by dropping the PITR test table.
+
+## Commands
+
+```sql
 DROP TABLE pitr_test;
-
+```
 
 Verify:
 
+```sql
 \dt
+```
 
+The `pitr_test` table should no longer be listed.
 
-The pitr_test table should no longer be listed.
+## Evidence
 
+![Dropped PITR Table](screenshots/08-drop-table.png)
 
-Evidence:
-screenshots/08-drop-table.png
+---
 
+# Step 8 - Stop PostgreSQL
 
-====================================================================
-PHASE 8 - STOP POSTGRESQL
-====================================================================
+## Purpose
 
-STEP 15 - Stop PostgreSQL
---------------------------------------------------------------------
-
-Purpose:
 Stop PostgreSQL before restoring the physical base backup.
 
-Command:
+## Command
 
+```bash
 sudo systemctl stop postgresql-16
+```
 
+## Evidence
 
-Evidence:
-screenshots/09-stop-server.png
+![PostgreSQL Server Stopped](screenshots/09-stop-server.png)
 
+---
 
-====================================================================
-PHASE 9 - PRESERVE CURRENT DATA DIRECTORY
-====================================================================
+# Step 9 - Move Current Data Directory
 
-STEP 16 - Rename Existing Data Directory
---------------------------------------------------------------------
+## Purpose
 
-Purpose:
-Preserve the current data directory before restoring the base backup.
+Preserve the existing PostgreSQL data directory before restoring the PITR base backup.
 
-Command:
+## Command
 
+```bash
 sudo mv /var/lib/pgsql/16/data \
 /var/lib/pgsql/16/data_old
+```
 
+## Evidence
 
-Evidence:
-screenshots/10-move-directory.png
+![Data Directory Moved](screenshots/10-move-directory.png)
 
+---
 
-====================================================================
-PHASE 10 - RESTORE BASE BACKUP
-====================================================================
+# Step 10 - Restore PITR Base Backup
 
-STEP 17 - Restore Physical Base Backup
---------------------------------------------------------------------
+## Purpose
 
-Purpose:
-Restore the previously created physical base backup as the
-PostgreSQL data directory.
+Restore the physical base backup into the PostgreSQL data directory.
 
-Commands:
+## Commands
 
+```bash
 sudo cp -a \
 /var/lib/pgsql/16/pitr_basebackup/. \
 /var/lib/pgsql/16/data/
+```
 
+Fix ownership:
 
-STEP 18 - Fix Ownership
---------------------------------------------------------------------
-
-Purpose:
-Ensure the restored PostgreSQL data directory is owned by the
-PostgreSQL operating-system user.
-
-Command:
-
+```bash
 sudo chown -R postgres:postgres \
 /var/lib/pgsql/16/data
+```
 
+---
 
-====================================================================
-PHASE 11 - CONFIGURE RECOVERY
-====================================================================
+# Step 11 - Configure PITR Recovery
 
-STEP 19 - Configure restore_command
---------------------------------------------------------------------
+## Purpose
 
-Purpose:
-Tell PostgreSQL how to retrieve archived WAL files during recovery.
+Configure PostgreSQL to retrieve archived WAL files and stop recovery at the selected recovery target.
 
-Configuration:
+## Command
 
+Edit the PostgreSQL configuration:
+
+```bash
+sudo vi /var/lib/pgsql/16/data/postgresql.auto.conf
+```
+
+Add:
+
+```text
 restore_command = 'cp /var/lib/pgsql/16/archive/%f %p'
-
-
-STEP 20 - Configure Recovery Target
---------------------------------------------------------------------
-
-Purpose:
-Tell PostgreSQL where recovery should stop.
-
-Configuration:
 
 recovery_target_time = 'YYYY-MM-DD HH:MM:SS'
 
-Replace the timestamp with the timestamp recorded during STEP 11.
+recovery_target_action = 'promote'
+```
+
+Replace `YYYY-MM-DD HH:MM:SS` with the timestamp recorded in Step 5.
 
 Example:
 
+```text
 recovery_target_time = '2026-07-19 18:42:30'
+```
 
-STEP 21 - Configure Recovery Target Action
---------------------------------------------------------------------
+## Evidence
 
-Configuration:
+![Recovery Configuration](screenshots/11-update-auto-conf-file.png)
 
-recovery_target_action = 'promote'
+---
 
+# Step 12 - Create Recovery Signal
 
-Evidence:
-screenshots/11-update-auto-conf-file.png
+## Purpose
 
+Create `recovery.signal` so PostgreSQL enters recovery when the server starts.
 
-====================================================================
-PHASE 12 - CREATE RECOVERY SIGNAL
-====================================================================
+## Commands
 
-STEP 22 - Create recovery.signal
---------------------------------------------------------------------
-
-Purpose:
-Create recovery.signal so PostgreSQL starts targeted recovery when
-the server starts.
-
-Command:
-
+```bash
 sudo touch /var/lib/pgsql/16/data/recovery.signal
+```
 
+Set ownership:
 
-STEP 23 - Set Ownership
---------------------------------------------------------------------
-
-Command:
-
+```bash
 sudo chown postgres:postgres \
 /var/lib/pgsql/16/data/recovery.signal
+```
 
+## Evidence
 
-Evidence:
-screenshots/12-create-recovery-file.png
+![Recovery Signal](screenshots/12-create-recovery-file.png)
 
+---
 
-====================================================================
-PHASE 13 - START POSTGRESQL
-====================================================================
+# Step 13 - Start PostgreSQL
 
-STEP 24 - Start PostgreSQL
---------------------------------------------------------------------
+## Purpose
 
-Purpose:
-Start PostgreSQL and allow it to replay the required archived WAL
-files.
+Start PostgreSQL and allow it to replay the archived WAL files until the configured recovery target is reached.
 
-Command:
+## Commands
 
+```bash
 sudo systemctl start postgresql-16
+```
 
+Check the server status:
 
-STEP 25 - Check PostgreSQL Status
---------------------------------------------------------------------
-
-Command:
-
+```bash
 sudo systemctl status postgresql-16
+```
 
+## Evidence
 
-Evidence:
-screenshots/13-start-server.png
+![PostgreSQL Server Started](screenshots/13-start-server.png)
 
+---
 
-====================================================================
-PHASE 14 - VERIFY PITR
-====================================================================
+# Step 14 - Verify PITR Recovery
 
-STEP 26 - Connect to companydb
---------------------------------------------------------------------
+## Purpose
 
-Command:
+Verify that PostgreSQL recovered the database to the selected point in time.
 
+## Commands
+
+Connect to `companydb`:
+
+```bash
 sudo -u postgres psql companydb
+```
 
+Check the recovered table:
 
-STEP 27 - Verify Recovered Table
---------------------------------------------------------------------
-
-Command:
-
-SELECT * FROM pitr_test;
-
+```sql
+SELECT *
+FROM pitr_test;
+```
 
 Expected:
 
-The pitr_test table exists.
+- The `pitr_test` table exists.
+- Data committed before the recovery target is present.
+- The `DROP TABLE` operation is not present in the recovered state.
 
-Records committed before the selected recovery target should be
-present.
+## Evidence
 
-The DROP TABLE operation should not be present in the recovered
-state if the recovery target was correctly selected before the
-DROP operation.
+![PITR Recovery Verification](screenshots/14-verify-PITR.png)
 
+---
 
-Evidence:
-screenshots/14-verify-PITR.png
+# Step 15 - Verify Recovery Completion
 
+## Purpose
 
-====================================================================
-PHASE 15 - VERIFY RECOVERY COMPLETED
-====================================================================
+Verify that PostgreSQL has completed recovery and is operating as a normal primary server.
 
-STEP 28 - Check Recovery Status
---------------------------------------------------------------------
+## Command
 
-Command:
-
+```sql
 SELECT pg_is_in_recovery();
+```
 
+## Expected
 
-Expected:
-
+```text
 f
+```
 
+`f` indicates that PostgreSQL is no longer in recovery mode.
 
-Meaning:
+## Evidence
 
-PostgreSQL has completed recovery and is operating as a normal
-primary server.
-
-
-Evidence:
-screenshots/14-verify-PITR.png
-
-
-====================================================================
-END OF PITR LAB
-====================================================================
+![Recovery Completed](screenshots/14-verify-PITR.png)
